@@ -30,7 +30,7 @@ export default function Navbar() {
         'digital-marketing',
         'seo',
         'video-editing'
-    ].some(service => pathname.includes(service))
+    ].some(service => pathname === `/${service}`)
 
     return (
         <nav className={`navbar navbar-expand-lg navbar-dark px-5 py-3 bg-[#a4a4a468] py-lg-0 ${isSticky ? 'sticky-top' : ''}`}
@@ -135,7 +135,7 @@ export default function Navbar() {
 
                     <Link
                         href="/blogs"
-                        className={`nav-item nav-link ${isActive('/blogs') ? 'active' : ''} ${isSticky ? 'text-dark' : ''}`}
+                        className={`nav-item nav-link ${pathname.startsWith('/blogs') ? 'active' : ''} ${isSticky ? 'text-dark' : ''}`}
                     >
                         Blog
                     </Link>

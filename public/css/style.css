@@ -216,13 +216,47 @@ h6,
 
 
 /*** Carousel ***/
-.carousel-caption {
+.container-fluid.position-relative.p-0 {
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+#header-carousel {
+    width: 100%;
+    overflow: hidden;
+}
+
+#header-carousel .carousel-item {
+    width: 100%;
+    position: relative;
+}
+
+#header-carousel .carousel-item::before {
+    content: '';
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: rgba(9, 30, 62, .7);
     z-index: 1;
+}
+
+#header-carousel .carousel-caption {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 2;
+}
+
+#header-carousel .carousel-caption .p-3 {
+    max-width: 900px;
 }
 
 @media (max-width: 576px) {

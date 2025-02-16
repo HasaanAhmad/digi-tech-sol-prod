@@ -1,4 +1,4 @@
-import { getPostBySlug, getAllPosts, getFeaturedMediaDetails } from '@/lib/wordpress';
+import { getPostBySlug, getAllPosts } from '@/lib/wordpress';
 import Image from 'next/image';
 // Generate metadata for SEO
 export async function generateMetadata({ params }) {
@@ -33,14 +33,6 @@ export async function generateMetadata({ params }) {
 export async function generateStaticParams() {
     try {
         const posts = await getAllPosts();
-
-        // Pre-fetch media for each post
-        await Promise.all(posts.map(async (post) => {
-            if (post.featured_media) {
-                await getFeaturedMediaDetails(post.featured_media);
-            }
-        }));
-
         return posts.map((post) => ({
             slug: post.slug,
         }));
@@ -61,11 +53,17 @@ const BlogPost = async ({ params }) => {
         return <div>Post not found</div>;
     }
 
-    // Get featured media details if available
-    let featuredMedia = null;
-    if (post.featured_media) {
-        featuredMedia = await getFeaturedMediaDetails(post.featured_media);
-    }
+    // Get the featured image URL from embedded media
+    const featuredImage = post._embedded?.['wp:featuredmedia']?.[0];
+    const imageUrl = featuredImage?.source_url;
+
+    // Get the most appropriate image size
+    const imageSizes = featuredImage?.media_details?.sizes;
+    const selectedSize = imageSizes?.['large'] || imageSizes?.['medium_large'] || imageSizes?.['medium'];
+
+    // Fallback dimensions if sizes are not available
+    const defaultWidth = 1024;
+    const defaultHeight = 682;
 
     return (
         <div className="container mx-auto py-5 px-4">
@@ -74,15 +72,18 @@ const BlogPost = async ({ params }) => {
                     dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                 />
 
-                {featuredMedia && (
+                {imageUrl && (
                     <div className="relative w-full mb-6">
                         <Image
-                            src={featuredMedia.media_details.sizes.large?.source_url || featuredMedia.source_url}
+                            src={selectedSize?.source_url || imageUrl}
                             alt={post.title.rendered}
-                            width={featuredMedia.media_details.sizes.large?.width || featuredMedia.media_details.width}
-                            height={featuredMedia.media_details.sizes.large?.height || featuredMedia.media_details.height}
+                            width={selectedSize?.width || defaultWidth}
+                            height={selectedSize?.height || defaultHeight}
                             className="w-full h-auto"
                             priority
+                            placeholder="blur"
+                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSAyVC0zLysvLTM3Pzw2Nz43LC8/RUhAQD5JTUlPNzc7TUVMSElJSUn/2wBDAR"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     </div>
                 )}

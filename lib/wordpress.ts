@@ -141,7 +141,10 @@ export async function getPostById(id: number): Promise<Post> {
 }
 
 export async function getPostBySlug(slug: string): Promise<Post> {
-    const url = getUrl("/wp-json/wp/v2/posts", { slug });
+    const url = getUrl("/wp-json/wp/v2/posts", {
+        slug,
+        _embed: true  // Add this to include embedded media
+    });
     const response = await wordpressFetch<Post[]>(url, {
         next: {
             ...defaultFetchOptions.next,
