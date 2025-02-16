@@ -1,0 +1,83 @@
+:root {
+    --primary: #04A3DA !important;
+    --dark: #091E3E !important;
+}
+
+/* Override Bootstrap primary colors */
+.bg-primary {
+    background-color: #04A3DA !important;
+}
+
+.btn-primary {
+    background-color: #04A3DA !important;
+    border-color: #04A3DA !important;
+}
+
+.btn-primary:hover {
+    background-color: #038dc0 !important;
+    border-color: #038dc0 !important;
+}
+
+.text-primary {
+    color: #04A3DA !important;
+}
+
+/* Counter section numbers */
+.counter-value {
+    color: #04A3DA !important;
+}
+
+/* Icons */
+.fa-primary,
+.bi-primary,
+[class^="fa-"].text-primary,
+[class*=" fa-"].text-primary,
+[class^="bi-"].text-primary,
+[class*=" bi-"].text-primary {
+    color: #04A3DA !important;
+}
+
+/* Service icons */
+.service-icon {
+    background: #04A3DA !important;
+}
+
+/* Progress bars */
+.progress-bar {
+    background-color: #04A3DA !important;
+}
+
+/* Links */
+a.text-primary:hover,
+a.text-primary:focus {
+    color: #038dc0 !important;
+}
+
+/* Border colors */
+.border-primary {
+    border-color: #04A3DA !important;
+}
+
+/* Carousel and other components */
+.owl-carousel .owl-dot.active {
+    background: #04A3DA !important;
+}
+
+/* Quote button and other primary buttons */
+.btn-primary,
+.btn-outline-primary:hover {
+    background-color: #04A3DA !important;
+    border-color: #04A3DA !important;
+}
+
+.btn-outline-primary {
+    color: #04A3DA !important;
+    border-color: #04A3DA !important;
+}
+
+/* Section titles and other primary colored elements */
+.section-title.text-primary,
+.fw-bold.text-primary {
+    color: #04A3DA !important;
+}
+
